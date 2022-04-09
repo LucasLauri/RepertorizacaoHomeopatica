@@ -657,10 +657,7 @@ namespace RepertorizacaoHome.src
             }
 
             // Inform the user that their application is ready for use. 
-            await CustomMessageBox.Show("A atualização foi instalada com sucesso! O programa será reiniciado");
-
-            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-            Application.Current.Shutdown();
+            await CustomMessageBox.Show($"A atualização foi instalada com sucesso!{Environment.NewLine}Na próxima execução do programa a atualização entrará em vigor");
         }
 
     }
