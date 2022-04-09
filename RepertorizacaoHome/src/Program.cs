@@ -125,10 +125,12 @@ namespace RepertorizacaoHome.src
         public void ProgramLoaded()
         {
             Task.Factory.StartNew(async () => 
-            { 
+            {                
                 await Task.Delay(4000);
                 CheckAndInstallUpdates();
             });
+
+
         }
 
         /// <summary>
@@ -564,46 +566,6 @@ namespace RepertorizacaoHome.src
 
                 if (ApplicationDeployment.IsNetworkDeployed)
                 {
-                    //ApplicationDeployment ad = ApplicationDeployment.CurrentDeployment;
-
-                    //try
-                    //{
-                    //    // Setup the trust level
-                    //    var deployment = ApplicationDeployment.CurrentDeployment;
-                    //    var appId = new ApplicationIdentity(deployment.UpdatedApplicationFullName);
-                    //    var unrestrictedPerms = new PermissionSet(PermissionState.Unrestricted);
-                    //    var appTrust = new ApplicationTrust(appId)
-                    //    {
-                    //        DefaultGrantSet = new PolicyStatement(unrestrictedPerms),
-                    //        IsApplicationTrustedToRun = true,
-                    //        Persist = true
-                    //    };
-                    //    ApplicationSecurityManager.UserApplicationTrusts.Add(appTrust);
-
-                    //    info = ad.CheckForDetailedUpdate();
-
-                    //}
-                    //catch (DeploymentDownloadException dde)
-                    //{
-                    //    Debug.WriteLine("The new version of the application cannot be downloaded at this time. \n\nPlease check your network connection, or try again later. Error: " + dde.Message);
-                    //    return;
-                    //}
-                    //catch (InvalidDeploymentException ide)
-                    //{
-                    //    Debug.WriteLine("Cannot check for a new version of the application. The ClickOnce deployment is corrupt. Please redeploy the application and try again. Error: " + ide.Message);
-                    //    return;
-                    //}
-                    //catch (InvalidOperationException ioe)
-                    //{
-                    //    Debug.WriteLine("This application cannot be updated. It is likely not a ClickOnce application. Error: " + ioe.Message);
-                    //    return;
-                    //}
-                    //catch(Exception e)
-                    //{
-                    //    Debug.WriteLine("General Error: " + e.Message);
-                    //    return;
-                    //}
-
                     if (CheckForUpdateAvailable())
                     {
 
@@ -611,7 +573,7 @@ namespace RepertorizacaoHome.src
 
                         Debug.WriteLine("Update encontrado");
 
-                        if(await CustomMessageBox.Show("Existe uma atualização pendente para este software, deseja realizar a isntalação agora?") == CustomMessageBox.MessageRetuns.Yes)
+                        if(await CustomMessageBox.Show("Existe uma atualização pendente para este software, deseja realizar a isntalação agora?", CustomMessageBox.MessageType.YesNo) == CustomMessageBox.MessageRetuns.Yes)
                         {
                             Debug.WriteLine("Update aceito pelo usuário");
 
@@ -619,6 +581,7 @@ namespace RepertorizacaoHome.src
                             {
                                 ad.Update();
                                 await CustomMessageBox.Show("O programa foi atualizado e será reiniciado.");
+                                System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
                                 Application.Current.Shutdown();
                             }
                             catch (DeploymentDownloadException dde)

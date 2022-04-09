@@ -47,7 +47,7 @@ namespace RepertorizacaoHome.pages
         /// <summary>
         /// Tipos de mensagens que podem ser exibidas
         /// </summary>
-        public enum MessageType { Ok, YesNo};
+        public enum MessageType { Ok, YesNo };
 
         /// <summary>
         /// Tipos de respostas do usuário
@@ -89,19 +89,20 @@ namespace RepertorizacaoHome.pages
 
         public CustomMessageBox()
         {
-            for(int i = 0; i< Enum.GetNames(typeof(MessageType)).Length; i++)
+            InitializeComponent();
+
+            for (int i = 0; i < Enum.GetNames(typeof(MessageType)).Length; i++)
             {
                 TypesVisilibitys.Add(Visibility.Collapsed);
             }
 
             TypesVisilibitys[0] = Visibility.Visible;
 
-            InitializeComponent();
 
             Program.CustomMessageBox = this;
 
             MessageVisibility = Visibility.Collapsed;
-            DataContext = new { MessageBox = this};
+            DataContext = new { MessageBox = this };
         }
 
         /// <summary>
@@ -151,7 +152,7 @@ namespace RepertorizacaoHome.pages
 
         private void BtnNo_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            CurrentReturn=MessageRetuns.No;
+            CurrentReturn = MessageRetuns.No;
         }
     }
 }

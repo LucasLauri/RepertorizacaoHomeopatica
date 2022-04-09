@@ -25,7 +25,7 @@
                     <TextBlock Text="Ok" Margin="5" TextAlignment="Center" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                 </Grid>
 
-                <Grid Margin="0,5,0,0" MouseDown="BtnOk_MouseDown" Width="150" Grid.Row="1" Visibility="{Binding MessageBox.TypesVisilibitys[1], FallbackValue=Collapsed}">
+                <Grid Margin="0,5,0,0" Width="150" Grid.Row="1" Visibility="{Binding MessageBox.TypesVisilibitys[1]}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="5"/>
