@@ -100,7 +100,7 @@ namespace RepertorizacaoHome.src
         public Program()
         {
 
-            //System.Diagnostics.Debugger.Launch();
+            System.Diagnostics.Debugger.Launch();
 
             //Directory.CreateDirectory(MainPath);
 
@@ -568,10 +568,14 @@ namespace RepertorizacaoHome.src
                             Debug.WriteLine("Update negado pelo usuário");
                         }
                     }
+                    else
+                    {
+                        Debug.WriteLine("Nenhum update encontrado");
+                    }
                 }
                 else
                 {
-                    Debug.WriteLine("Nenhum update encontrado");
+                    Debug.WriteLine("Sem conexão");
                 }
             });
         }
