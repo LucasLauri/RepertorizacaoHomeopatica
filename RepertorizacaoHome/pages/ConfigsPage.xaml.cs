@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Deployment.Application;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -61,6 +62,18 @@ namespace RepertorizacaoHome.pages
             set => SetField(ref _pageVisibility, value);
         }
 
+
+        private string _currenteVersion;
+        /// <summary>
+        /// Versão atual do programa
+        /// </summary>
+        public string CurrenteVersion
+        {
+            get => _currenteVersion;
+            set => SetField(ref _currenteVersion, value);
+        }
+
+
         public ConfigsPage()
         {
             InitializeComponent();
@@ -68,6 +81,15 @@ namespace RepertorizacaoHome.pages
             Program.ConfigsPage = this;
 
             DataContext = new { Program, Configs = this };
+
+            try
+            {
+                CurrenteVersion = "V: " + ApplicationDeployment.CurrentDeployment.CurrentVersion.ToString();
+            }
+            catch
+            {
+                CurrenteVersion = "";
+            }
         }
 
         private void BtnOk_MouseDown(object sender, MouseButtonEventArgs e)

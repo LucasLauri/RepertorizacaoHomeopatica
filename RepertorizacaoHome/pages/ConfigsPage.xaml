@@ -56,6 +56,7 @@
                         <Rectangle Fill="LightGreen" RadiusX="10" RadiusY="10" Stroke="Black" StrokeThickness="1"/>
                         <TextBlock Text="Ok" Margin="5" TextAlignment="Center" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap"/>
                     </Grid>
+                    <TextBlock Text="{Binding Configs.CurrenteVersion, FallbackValue=0.0.0}" HorizontalAlignment="Right" VerticalAlignment="Bottom" Opacity="0.5"/>
                 </Grid>
             </StackPanel>
         </Grid>
