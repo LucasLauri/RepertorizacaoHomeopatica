@@ -497,7 +497,7 @@ namespace RepertorizacaoHome.src
         /// </summary>
         public void ClearMedicines()
         {
-            InstallUpdateSyncWithInfo();
+            //InstallUpdateSyncWithInfo();
 
             Medicines.Clear();
 
