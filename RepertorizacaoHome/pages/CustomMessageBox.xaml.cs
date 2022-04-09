@@ -117,8 +117,12 @@ namespace RepertorizacaoHome.pages
             switch (type)
             {
                 case MessageType.Ok:
+                    TypesVisilibitys[0] = Visibility.Visible;
+                    TypesVisilibitys[1] = Visibility.Collapsed;
                     break;
                 case MessageType.YesNo:
+                    TypesVisilibitys[0] = Visibility.Collapsed;
+                    TypesVisilibitys[1] = Visibility.Visible;
                     break;
             }
 
