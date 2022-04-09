@@ -103,7 +103,7 @@ namespace RepertorizacaoHome.src
         public Program()
         {
 
-            //System.Diagnostics.Debugger.Launch();
+            System.Diagnostics.Debugger.Launch();
 
             //Directory.CreateDirectory(MainPath);
 
@@ -553,6 +553,11 @@ namespace RepertorizacaoHome.src
                     catch (InvalidOperationException ioe)
                     {
                         Debug.WriteLine("This application cannot be updated. It is likely not a ClickOnce application. Error: " + ioe.Message);
+                        return;
+                    }
+                    catch(Exception e)
+                    {
+                        Debug.WriteLine("General Error: " + e.Message);
                         return;
                     }
 
