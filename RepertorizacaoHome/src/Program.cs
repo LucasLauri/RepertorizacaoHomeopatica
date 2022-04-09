@@ -502,6 +502,7 @@ namespace RepertorizacaoHome.src
             Medicines.Clear();
 
             UpdatesMedicinesView();
+            //TESTE
         }
 
         private void InstallUpdateSyncWithInfo()
