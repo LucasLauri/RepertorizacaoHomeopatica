@@ -7,7 +7,7 @@
     <ProjectGuid>{EA8ECF1E-8254-437D-B4B8-86146428ED52}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>RepertorizacaoHome</RootNamespace>
-    <AssemblyName>RepertorizacaoHomeopatica</AssemblyName>
+    <AssemblyName>Repertorização Homeopática</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -28,8 +28,9 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <UpdateUrl>https://raw.githubusercontent.com/LucasLauri/RepertorizacaoHomeopatica/master/RepertorizacaoHome/Installer/</UpdateUrl>
+    <PublisherName>Lucas Lauri</PublisherName>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>5</ApplicationRevision>
+    <ApplicationRevision>8</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
