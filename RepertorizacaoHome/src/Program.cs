@@ -99,7 +99,7 @@ namespace RepertorizacaoHome.src
         public Program()
         {
 
-            System.Diagnostics.Debugger.Launch();
+            //System.Diagnostics.Debugger.Launch();
 
             //Directory.CreateDirectory(MainPath);
 
@@ -502,7 +502,6 @@ namespace RepertorizacaoHome.src
             Medicines.Clear();
 
             UpdatesMedicinesView();
-            //TESTE
         }
 
         private void InstallUpdateSyncWithInfo()
