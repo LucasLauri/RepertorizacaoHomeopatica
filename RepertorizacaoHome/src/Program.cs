@@ -590,7 +590,14 @@ namespace RepertorizacaoHome.src
                             {
                                 CustomMessageBox.Show("Ocorreu um problema durante a atualização do programa!");
 
-                                Debug.WriteLine("Erro ao instalar o programa: " + dde);
+                                Debug.WriteLine("Erro ao instalar o programa: " + dde.Message);
+                                return;
+                            }
+                            catch(Exception e)
+                            {
+                                CustomMessageBox.Show("Ocorreu um problema durante a atualização do programa!");
+
+                                Debug.WriteLine("Erro ao instalar o programa: " + e.Message);
                                 return;
                             }
                         }
