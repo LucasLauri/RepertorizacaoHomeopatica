@@ -573,13 +573,15 @@ namespace RepertorizacaoHome.src
 
                         Debug.WriteLine("Update encontrado");
 
-                        if(await CustomMessageBox.Show("Existe uma atualização pendente para este software, deseja realizar a isntalação agora?", CustomMessageBox.MessageType.YesNo) == CustomMessageBox.MessageRetuns.Yes)
+                        if(await CustomMessageBox.Show("Existe uma atualização pendente para este software, deseja realizar a instalação agora?", CustomMessageBox.MessageType.YesNo) == CustomMessageBox.MessageRetuns.Yes)
                         {
                             Debug.WriteLine("Update aceito pelo usuário");
 
                             try
                             {
+                                Debug.WriteLine("Antes up");
                                 ad.Update();
+                                Debug.WriteLine("Pós up");
                                 await CustomMessageBox.Show("O programa foi atualizado e será reiniciado.");
                                 System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
                                 Application.Current.Shutdown();
