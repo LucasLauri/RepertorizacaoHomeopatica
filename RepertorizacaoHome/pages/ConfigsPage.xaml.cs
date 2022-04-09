@@ -62,7 +62,7 @@ namespace RepertorizacaoHome.pages
             set => SetField(ref _pageVisibility, value);
         }
 
-
+        
         private string _currenteVersion;
         /// <summary>
         /// Versão atual do programa
