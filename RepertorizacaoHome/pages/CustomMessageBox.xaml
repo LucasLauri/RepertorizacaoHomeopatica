@@ -20,9 +20,28 @@
                 
                 <TextBlock Text="{Binding MessageBox.Message, FallbackValue=Mensagem a ser exibida}" HorizontalAlignment="Center"/>
 
-                <Grid Margin="0,5,0,0" MouseDown="BtnOk_MouseDown" Width="100" Grid.Row="1">
+                <Grid Margin="0,5,0,0" MouseDown="BtnOk_MouseDown" Width="100" Grid.Row="1" Visibility="{Binding MessageBox.TypesVisilibitys[0]}">
                     <Rectangle Fill="LightGreen" RadiusX="10" RadiusY="10" Stroke="Black" StrokeThickness="1"/>
                     <TextBlock Text="Ok" Margin="5" TextAlignment="Center" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </Grid>
+
+                <Grid Margin="0,5,0,0" MouseDown="BtnOk_MouseDown" Width="150" Grid.Row="1" Visibility="{Binding MessageBox.TypesVisilibitys[1], FallbackValue=Collapsed}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid MouseDown="BtnYes_MouseDown" >
+                        <Rectangle Fill="LightGreen" RadiusX="10" RadiusY="10" Stroke="Black" StrokeThickness="1"/>
+                        <TextBlock Text="Sim" Margin="5" TextAlignment="Center" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    </Grid>
+
+                    <Grid MouseDown="BtnNo_MouseDown"  Grid.Column="2">
+                        <Rectangle Fill="LightSalmon" RadiusX="10" RadiusY="10" Stroke="Black" StrokeThickness="1"/>
+                        <TextBlock Text="Não" Margin="5" TextAlignment="Center" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    </Grid>
+
                 </Grid>
             </Grid>
         </Grid>

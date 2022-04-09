@@ -1,6 +1,7 @@
 ﻿using RepertorizacaoHome.src;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -43,7 +44,27 @@ namespace RepertorizacaoHome.pages
 
         #endregion
 
+        /// <summary>
+        /// Tipos de mensagens que podem ser exibidas
+        /// </summary>
+        public enum MessageType { Ok, YesNo};
+
+        /// <summary>
+        /// Tipos de respostas do usuário
+        /// </summary>
+        public enum MessageRetuns { None, Ok, Yes, No }
+
         public Program Program { get; set; } = ((MainWindow)Application.Current.MainWindow).Program;
+
+        /// <summary>
+        /// Visibilidade dos botões da mensagem
+        /// </summary>
+        public ObservableCollection<Visibility> TypesVisilibitys { get; set; } = new ObservableCollection<Visibility>();
+
+        /// <summary>
+        /// Retorno desta mensagem
+        /// </summary>
+        public MessageRetuns CurrentReturn { get; set; } = MessageRetuns.None;
 
         private string _message;
         /// <summary>
@@ -66,11 +87,15 @@ namespace RepertorizacaoHome.pages
             set => SetField(ref _messageVisibility, value);
         }
 
-
-
-
         public CustomMessageBox()
         {
+            for(int i = 0; i< Enum.GetNames(typeof(MessageType)).Length; i++)
+            {
+                TypesVisilibitys.Add(Visibility.Collapsed);
+            }
+
+            TypesVisilibitys[0] = Visibility.Visible;
+
             InitializeComponent();
 
             Program.CustomMessageBox = this;
@@ -83,15 +108,46 @@ namespace RepertorizacaoHome.pages
         /// Exibide mensagem ao usuário
         /// </summary>
         /// <param name="message"></param>
-        public void Show(string message)
+        public async Task<MessageRetuns> Show(string message, MessageType type = MessageType.Ok)
         {
+            CurrentReturn = MessageRetuns.None;
+
             Message = message;
+
+            switch (type)
+            {
+                case MessageType.Ok:
+                    break;
+                case MessageType.YesNo:
+                    break;
+            }
+
             MessageVisibility = Visibility.Visible;
+
+            while (CurrentReturn == MessageRetuns.None)
+            {
+                await Task.Delay(100);
+            }
+
+
+            MessageVisibility = Visibility.Collapsed;
+
+            return CurrentReturn;
         }
 
         private void BtnOk_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            MessageVisibility = Visibility.Collapsed;
+            CurrentReturn = MessageRetuns.Ok;
+        }
+
+        private void BtnYes_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            CurrentReturn = MessageRetuns.Yes;
+        }
+
+        private void BtnNo_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            CurrentReturn=MessageRetuns.No;
         }
     }
 }

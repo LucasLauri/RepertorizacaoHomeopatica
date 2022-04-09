@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Deployment.Application;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -118,6 +119,11 @@ namespace RepertorizacaoHome.src
         /// </summary>
         public void ProgramLoaded()
         {
+            Task.Factory.StartNew(async () => 
+            { 
+                await Task.Delay(2000);
+                CheckAndInstallUpdates();
+            });
         }
 
         /// <summary>
@@ -497,83 +503,77 @@ namespace RepertorizacaoHome.src
         /// </summary>
         public void ClearMedicines()
         {
-            //InstallUpdateSyncWithInfo();
-
             Medicines.Clear();
 
             UpdatesMedicinesView();
         }
 
-        private void InstallUpdateSyncWithInfo()
+        private void CheckAndInstallUpdates()
         {
+            Task.Factory.StartNew(async () => {
 
-            UpdateCheckInfo info = null;
+                Debug.WriteLine("Iniciando método de update...");
 
+                UpdateCheckInfo info = null;
 
-
-            if (ApplicationDeployment.IsNetworkDeployed)
-            {
-                ApplicationDeployment ad = ApplicationDeployment.CurrentDeployment;
-
-                try
+                if (ApplicationDeployment.IsNetworkDeployed)
                 {
-                    info = ad.CheckForDetailedUpdate();
+                    ApplicationDeployment ad = ApplicationDeployment.CurrentDeployment;
 
-                }
-                catch (DeploymentDownloadException dde)
-                {
-                    MessageBox.Show("The new version of the application cannot be downloaded at this time. \n\nPlease check your network connection, or try again later. Error: " + dde.Message);
-                    return;
-                }
-                catch (InvalidDeploymentException ide)
-                {
-                    MessageBox.Show("Cannot check for a new version of the application. The ClickOnce deployment is corrupt. Please redeploy the application and try again. Error: " + ide.Message);
-                    return;
-                }
-                catch (InvalidOperationException ioe)
-                {
-                    MessageBox.Show("This application cannot be updated. It is likely not a ClickOnce application. Error: " + ioe.Message);
-                    return;
-                }
-
-                if (info.UpdateAvailable)
-                {
-                    Boolean doUpdate = true;
-
-                    if (!info.IsUpdateRequired)
+                    try
                     {
-                        //DialogResult dr = MessageBox.Show("An update is available. Would you like to update the application now?", "Update Available", MessageBoxButtons.OKCancel);
-                        //if (!(DialogResult.OK == dr))
-                        //{
-                        //    doUpdate = false;
-                        //}
+                        info = ad.CheckForDetailedUpdate();
+
                     }
-                    else
+                    catch (DeploymentDownloadException dde)
                     {
-                        // Display a message that the app MUST reboot. Display the minimum required version.
-                        //MessageBox.Show("This application has detected a mandatory update from your current " +
-                        //    "version to version " + info.MinimumRequiredVersion.ToString() +
-                        //    ". The application will now install the update and restart.",
-                        //    "Update Available", MessageBoxButtons.OK,
-                        //    MessageBoxIcon.Information);
+                        Debug.WriteLine("The new version of the application cannot be downloaded at this time. \n\nPlease check your network connection, or try again later. Error: " + dde.Message);
+                        return;
+                    }
+                    catch (InvalidDeploymentException ide)
+                    {
+                        Debug.WriteLine("Cannot check for a new version of the application. The ClickOnce deployment is corrupt. Please redeploy the application and try again. Error: " + ide.Message);
+                        return;
+                    }
+                    catch (InvalidOperationException ioe)
+                    {
+                        Debug.WriteLine("This application cannot be updated. It is likely not a ClickOnce application. Error: " + ioe.Message);
+                        return;
                     }
 
-                    if (doUpdate)
+                    if (info.UpdateAvailable)
                     {
-                        try
+                        Debug.WriteLine("Update encontrado");
+
+                        if(await CustomMessageBox.Show("Existe uma atualização pendente para este software, deseja realizar a isntalação agora?") == CustomMessageBox.MessageRetuns.Yes)
                         {
-                            ad.Update();
-                            MessageBox.Show("The application has been upgraded, and will now restart.");
-                            //Application.Restart();
+                            Debug.WriteLine("Update aceito pelo usuário");
+
+                            try
+                            {
+                                ad.Update();
+                                await CustomMessageBox.Show("O programa foi atualizado e será reiniciado.");
+                                Application.Current.Shutdown();
+                            }
+                            catch (DeploymentDownloadException dde)
+                            {
+                                CustomMessageBox.Show("Ocorreu um problema durante a atualização do programa!");
+
+                                Debug.WriteLine("Erro ao instalar o programa: " + dde);
+                                return;
+                            }
                         }
-                        catch (DeploymentDownloadException dde)
+                        else
                         {
-                            MessageBox.Show("Cannot install the latest version of the application. \n\nPlease check your network connection, or try again later. Error: " + dde);
-                            return;
+                            Debug.WriteLine("Update negado pelo usuário");
                         }
                     }
                 }
-            }
+                else
+                {
+                    Debug.WriteLine("Nenhum update encontrado");
+                }
+            });
         }
     }
 }
