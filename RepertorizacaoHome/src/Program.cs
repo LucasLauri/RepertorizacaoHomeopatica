@@ -10,6 +10,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Security;
+using System.Security.Permissions;
+using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -522,6 +525,18 @@ namespace RepertorizacaoHome.src
 
                     try
                     {
+                        // Setup the trust level
+                        var deployment = ApplicationDeployment.CurrentDeployment;
+                        var appId = new ApplicationIdentity(deployment.UpdatedApplicationFullName);
+                        var unrestrictedPerms = new PermissionSet(PermissionState.Unrestricted);
+                        var appTrust = new ApplicationTrust(appId)
+                        {
+                            DefaultGrantSet = new PolicyStatement(unrestrictedPerms),
+                            IsApplicationTrustedToRun = true,
+                            Persist = true
+                        };
+                        ApplicationSecurityManager.UserApplicationTrusts.Add(appTrust);
+
                         info = ad.CheckForDetailedUpdate();
 
                     }
