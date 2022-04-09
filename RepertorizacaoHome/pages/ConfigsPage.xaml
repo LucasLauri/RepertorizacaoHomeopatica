@@ -1,0 +1,63 @@
+﻿<Page x:Class="RepertorizacaoHome.pages.ConfigsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:RepertorizacaoHome.pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="ConfigsPage">
+
+    <Page.Resources>
+        <local:MethodConverter x:Key="MethodConverter" />
+
+        <Style x:Key="RadioMethodsStyle" TargetType="RadioButton">
+            <Setter Property="Margin" Value="3"/>
+        </Style>
+        
+    </Page.Resources>
+    
+    <Grid>
+        <Rectangle Fill="Black" Opacity="0.6"/>
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Rectangle Fill="White" RadiusX="10" RadiusY="10"/>
+            <StackPanel Margin="10">
+                <Grid Margin="0,3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Método de repertorização utilizado:" Grid.ColumnSpan="99"/>
+
+                    <RadioButton Content="Método da adição" IsChecked="{Binding Program.DataContainer.CurrentMethod, Converter={StaticResource MethodConverter}, ConverterParameter={x:Static local:Methods.Add}}" Style="{StaticResource RadioMethodsStyle}" Grid.Row="1"/>
+                    <RadioButton Content="Método do sintoma diretor" IsChecked="{Binding Program.DataContainer.CurrentMethod, Converter={StaticResource MethodConverter}, ConverterParameter={x:Static local:Methods.Symptoms}}" Style="{StaticResource RadioMethodsStyle}" Grid.Column="1" Grid.Row="1"/>
+                    <RadioButton Content="Método da eliminação" IsChecked="{Binding Program.DataContainer.CurrentMethod, Converter={StaticResource MethodConverter}, ConverterParameter={x:Static local:Methods.Elimination}}" Style="{StaticResource RadioMethodsStyle}" Grid.Column="2" Grid.Row="1"/>
+                </Grid>
+
+                <Grid Margin="0,0,0,3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <CheckBox IsChecked="{Binding Program.DataContainer.ShowStatistics}"/>
+                    <TextBlock Text="Exibir mensagens na execução do método" Grid.Column="1"/>
+                </Grid>
+                
+                
+                <Grid>
+                    <Grid Margin="0,5,0,0" MouseDown="BtnOk_MouseDown" Width="150">
+                        <Rectangle Fill="LightGreen" RadiusX="10" RadiusY="10" Stroke="Black" StrokeThickness="1"/>
+                        <TextBlock Text="Ok" Margin="5" TextAlignment="Center" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                    </Grid>
+                </Grid>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

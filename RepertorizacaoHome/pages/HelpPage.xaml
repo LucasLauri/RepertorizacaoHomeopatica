@@ -1,0 +1,45 @@
+﻿<Page x:Class="RepertorizacaoHome.pages.HelpPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:RepertorizacaoHome.pages"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="HelpPage">
+
+    <Grid>
+        <Rectangle Fill="Black" Opacity="0.6"/>
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Rectangle Fill="White" RadiusX="10" RadiusY="10"/>
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock TextAlignment="Justify" TextWrapping="Wrap">
+                    Copie (Ctrl+C) um texto do site homeoint.org e então clique no botão "Adicionar medicamentos" da janela principal. <LineBreak></LineBreak>
+                    Pronto! O texto será analisado e os medicamentos encontrados serão apresentados na lista da direita.<LineBreak></LineBreak>
+                    Ainda é possível clicar sobre os identificadores das colunas da lista para ordenar os medicamentos por nome, pontuação ou recorrência.
+                    </TextBlock>
+
+                    <TextBlock Grid.Row="2" TextAlignment="Center" TextWrapping="Wrap">
+                    Este software foi desenvolvido por mim, Lucas Lauri. <LineBreak></LineBreak>
+                    Dúvidas, sugestões e reclamações podem ser encaminhadas para lucaslauri@hotmail.com
+                    </TextBlock>
+                </Grid>
+
+                <Grid Margin="10" Grid.Row="1" MouseDown="BtnOk_MouseDown">
+                    <Rectangle Fill="LightGreen" RadiusX="10" RadiusY="10" Stroke="Black" StrokeThickness="1"/>
+                    <TextBlock Text="OK!" Margin="10" TextAlignment="Center" FontSize="18" VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap"/>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>
