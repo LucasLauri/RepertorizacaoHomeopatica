@@ -571,7 +571,7 @@ namespace RepertorizacaoHome.src
                     if (!CheckForUpdateAvailable())
                         return;
 
-                    if (await CustomMessageBox.Show("Não foi possível instalar a atualização do programa!", CustomMessageBox.MessageType.YesNo) == CustomMessageBox.MessageRetuns.No)
+                    if (await CustomMessageBox.Show($"Foi encontrada uma atualização para o programa.{Environment.NewLine}Deseja iniciar a instalação agora?", CustomMessageBox.MessageType.YesNo) == CustomMessageBox.MessageRetuns.No)
                         return;
 
                     Uri deploymentUri = ApplicationDeployment.CurrentDeployment.UpdateLocation;
