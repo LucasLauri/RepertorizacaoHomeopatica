@@ -124,7 +124,7 @@ namespace RepertorizacaoHome.src
         {
             Task.Factory.StartNew(async () => 
             { 
-                await Task.Delay(2000);
+                await Task.Delay(4000);
                 CheckAndInstallUpdates();
             });
         }
