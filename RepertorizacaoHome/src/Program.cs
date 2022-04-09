@@ -26,6 +26,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using System.Xml.Serialization;
+using DownloadProgressChangedEventArgs = System.Deployment.Application.DownloadProgressChangedEventArgs;
 
 namespace RepertorizacaoHome.src
 {
@@ -128,6 +129,7 @@ namespace RepertorizacaoHome.src
             {                
                 await Task.Delay(4000);
                 CheckAndInstallUpdates();
+                //InstallApplication("");
             });
 
 
@@ -556,80 +558,110 @@ namespace RepertorizacaoHome.src
             return false;
         }
 
+
+
+        InPlaceHostingManager iphm = null;
+
         private void CheckAndInstallUpdates()
         {
             Task.Factory.StartNew(async () => {
-
-                Debug.WriteLine("Iniciando método de update...");
-
-                UpdateCheckInfo info = null;
-
-                if (ApplicationDeployment.IsNetworkDeployed)
+                try
                 {
-                    if (CheckForUpdateAvailable())
-                    {
-                        // Setup the trust level
-                        var deployment = ApplicationDeployment.CurrentDeployment;
-                        var appId = new ApplicationIdentity(deployment.UpdatedApplicationFullName);
-                        var unrestrictedPerms = new PermissionSet(PermissionState.Unrestricted);
-                        var appTrust = new ApplicationTrust(appId)
-                        {
-                            DefaultGrantSet = new PolicyStatement(unrestrictedPerms),
-                            IsApplicationTrustedToRun = true,
-                            Persist = true
-                        };
-                        ApplicationSecurityManager.UserApplicationTrusts.Add(appTrust);
 
-                        ApplicationDeployment ad = ApplicationDeployment.CurrentDeployment;
+                    if (!CheckForUpdateAvailable())
+                        return;
 
-                        Debug.WriteLine("Update encontrado");
+                    if (await CustomMessageBox.Show("Não foi possível instalar a atualização do programa!", CustomMessageBox.MessageType.YesNo) == CustomMessageBox.MessageRetuns.No)
+                        return;
 
-                        if(await CustomMessageBox.Show("Existe uma atualização pendente para este software, deseja realizar a instalação agora?", CustomMessageBox.MessageType.YesNo) == CustomMessageBox.MessageRetuns.Yes)
-                        {
-                            Debug.WriteLine("Update aceito pelo usuário");
-
-                            try
-                            {
-                                Debug.WriteLine("Antes up");
-                                ad.Update();
-                                Debug.WriteLine("Pós up");
-                                await CustomMessageBox.Show("O programa foi atualizado e será reiniciado.");
-                                System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
-                                Application.Current.Shutdown();
-                            }
-                            catch (DeploymentDownloadException dde)
-                            {
-                                CustomMessageBox.Show("Ocorreu um problema durante a atualização do programa!");
-
-                                Debug.WriteLine("Erro ao instalar o programa: " + dde.Message);
-                                return;
-                            }
-                            catch(Exception e)
-                            {
-                                CustomMessageBox.Show("Ocorreu um problema durante a atualização do programa!");
-
-                                Debug.WriteLine("Erro ao instalar o programa: " + e.Message);
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            Debug.WriteLine("Update negado pelo usuário");
-                        }
-                    }
-                    else
-                    {
-                        Debug.WriteLine("Nenhum update encontrado");
-                    }
+                    Uri deploymentUri = ApplicationDeployment.CurrentDeployment.UpdateLocation;
+                    iphm = new InPlaceHostingManager(deploymentUri, false);
                 }
-                else
+                catch (Exception ex)
                 {
-                    Debug.WriteLine("Sem conexão");
+                    CustomMessageBox.Show("Não foi possível instalar a atualização do programa!");
                 }
+
+                iphm.GetManifestCompleted += new EventHandler<GetManifestCompletedEventArgs>(iphm_GetManifestCompleted);
+                iphm.GetManifestAsync();
+
             });
         }
 
+        void iphm_GetManifestCompleted(object sender, GetManifestCompletedEventArgs e)
+        {
+            // Check for an error.
+            if (e.Error != null)
+            {
+                // Cancel download and install.
+                CustomMessageBox.Show("Não foi possível instalar a atualização do programa!");
+                return;
+            }
 
+            // Verify this application can be installed.
+            try
+            {
+                // the true parameter allows InPlaceHostingManager
+                // to grant the permissions requested in the applicaiton manifest.
+                iphm.AssertApplicationRequirements(true);
+            }
+            catch (Exception ex)
+            {
+                CustomMessageBox.Show("Não foi possível instalar a atualização do programa!");
+                return;
+            }
+
+            // Use the information from GetManifestCompleted() to confirm 
+            // that the user wants to proceed.
+            string appInfo = "Application Name: " + e.ProductName;
+            appInfo += "\nVersion: " + e.Version;
+            appInfo += "\nSupport/Help Requests: " + (e.SupportUri != null ?
+                e.SupportUri.ToString() : "N/A");
+            appInfo += "\n\nConfirmed that this application can run with its requested permissions.";
+            // if (isFullTrust)
+            // appInfo += "\n\nThis application requires full trust in order to run.";
+            appInfo += "\n\nProceed with installation?";
+
+            //DialogResult dr = MessageBox.Show(appInfo, "Confirm Application Install",
+            //    MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            //if (dr != System.Windows.Forms.DialogResult.OK)
+            //{
+            //    return;
+            //}
+
+            // Download the deployment manifest. 
+            //iphm.DownloadProgressChanged += new EventHandler<DownloadProgressChangedEventArgs>(iphm_DownloadProgressChanged);
+            iphm.DownloadApplicationCompleted += new EventHandler<DownloadApplicationCompletedEventArgs>(iphm_DownloadApplicationCompleted);
+
+            try
+            {
+                // Usually this shouldn't throw an exception unless AssertApplicationRequirements() failed, 
+                // or you did not call that method before calling this one.
+                iphm.DownloadApplicationAsync();
+            }
+            catch (Exception downloadEx)
+            {
+                CustomMessageBox.Show("Não foi possível instalar a atualização do programa!");
+                return;
+            }
+        }
+
+        async void iphm_DownloadApplicationCompleted(object sender, DownloadApplicationCompletedEventArgs e)
+        {
+            // Check for an error.
+            if (e.Error != null)
+            {
+                // Cancel download and install.
+                CustomMessageBox.Show("Não foi possível instalar a atualização do programa!");
+                return;
+            }
+
+            // Inform the user that their application is ready for use. 
+            await CustomMessageBox.Show("A atualização foi instalada com sucesso! O programa será reiniciado");
+
+            System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+            Application.Current.Shutdown();
+        }
 
     }
 }
