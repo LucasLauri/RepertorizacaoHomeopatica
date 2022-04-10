@@ -412,7 +412,7 @@ namespace RepertorizacaoHome.src
         private Medicine GetMedicineByName(string name)
         {
             foreach(Medicine medicine in Medicines)
-                if(medicine.Name == name)
+                if(medicine.Name.ToLower() == name.ToLower())
                     return medicine;
 
             return null;
@@ -565,6 +565,9 @@ namespace RepertorizacaoHome.src
         private void CheckAndInstallUpdates()
         {
             Task.Factory.StartNew(async () => {
+
+                bool showErrorMessage = false;
+
                 try
                 {
 
@@ -574,12 +577,17 @@ namespace RepertorizacaoHome.src
                     if (await CustomMessageBox.Show($"Foi encontrada uma atualização para o programa.{Environment.NewLine}Deseja iniciar a instalação agora?", CustomMessageBox.MessageType.YesNo) == CustomMessageBox.MessageRetuns.No)
                         return;
 
+                    showErrorMessage = true;
+
                     Uri deploymentUri = ApplicationDeployment.CurrentDeployment.UpdateLocation;
                     iphm = new InPlaceHostingManager(deploymentUri, false);
                 }
                 catch (Exception ex)
                 {
-                    CustomMessageBox.Show("Não foi possível instalar a atualização do programa!");
+                    if(showErrorMessage)
+                        CustomMessageBox.Show("Não foi possível instalar a atualização do programa!");
+
+                    return;
                 }
 
                 iphm.GetManifestCompleted += new EventHandler<GetManifestCompletedEventArgs>(iphm_GetManifestCompleted);

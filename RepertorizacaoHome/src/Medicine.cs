@@ -78,7 +78,7 @@ namespace RepertorizacaoHome.src
 
         public bool Equals(Medicine other)
         {
-            return Name.Equals(other.Name);
+            return Name.ToLower().Equals(other.Name.ToLower());
         }
 
     }
